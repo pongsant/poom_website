@@ -106,33 +106,108 @@ function setupHomeIndex() {
 
   items.forEach((item) => {
     const collection = item.dataset.homeCollection;
+    const arrow = item.querySelector(".home-motion-hint");
+    let progress = 0;
+    let touchStartProgress = 0;
+    let displayedProgress = 0;
+    let frame = 0;
+    let previousTime = 0;
+    let available = 0;
+    let start = 0;
+    let travel = 1;
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
-    item.addEventListener("pointerenter", () => {
-      items.forEach((menuItem) => menuItem.classList.remove("is-active"));
-      item.classList.add("is-active");
-      showPhoto(collection, Math.floor(Math.random() * previewSets[collection].length));
+    function drawArrow() {
+      const minimum = Math.min(32, available);
+      const length = minimum + displayedProgress * (available - minimum);
+      arrow.style.setProperty("--arrow-scale", available ? length / available : 0);
+      arrow.style.setProperty("--arrow-length", `${length}px`);
+    }
+
+    function measureArrow() {
+      const bounds = arrow.getBoundingClientRect();
+      available = bounds.width;
+      start = bounds.left + Math.min(32, available);
+      travel = Math.max(1, available - 32);
+      drawArrow();
+    }
+
+    function animateArrow(time) {
+      const elapsed = previousTime ? Math.min(time - previousTime, 64) : 16.67;
+      previousTime = time;
+      displayedProgress += (progress - displayedProgress) * (1 - Math.exp(-elapsed / 45));
+      if (reducedMotion.matches || Math.abs(progress - displayedProgress) < 0.001) displayedProgress = progress;
+      drawArrow();
+      if (item.classList.contains("is-active")) {
+        showPhoto(collection, Math.floor(displayedProgress * previewSets[collection].length));
+      }
+      if (displayedProgress !== progress) {
+        frame = requestAnimationFrame(animateArrow);
+      } else {
+        frame = 0;
+        previousTime = 0;
+      }
+    }
+
+    new ResizeObserver(measureArrow).observe(arrow);
+    measureArrow();
+
+    function updatePreview(position) {
+      item.classList.add("has-interacted");
+      progress = Math.max(0, Math.min(1, position));
+      items.forEach((menuItem) => menuItem.classList.toggle("is-active", menuItem === item));
+      if (!frame) frame = requestAnimationFrame(animateArrow);
+    }
+
+    item.addEventListener("pointerenter", (event) => {
+      measureArrow();
+      if (event.pointerType !== "touch") updatePreview(progress);
     });
 
     item.addEventListener("focus", () => {
-      showPhoto(collection, Math.floor(Math.random() * previewSets[collection].length));
+      updatePreview(progress);
     });
 
+    let touchStartX = null;
+    let didSwipe = false;
+
+    item.addEventListener("pointerdown", (event) => {
+      item.classList.add("has-interacted");
+      measureArrow();
+      didSwipe = false;
+      if (event.pointerType !== "touch") return;
+      touchStartX = event.clientX;
+      touchStartProgress = progress;
+      item.setPointerCapture(event.pointerId);
+    });
+
+    item.addEventListener("pointerup", () => { touchStartX = null; });
+    item.addEventListener("pointercancel", () => { touchStartX = null; });
+
     item.addEventListener("pointermove", (event) => {
-      if (event.pointerType === "touch") return;
-      const bounds = item.getBoundingClientRect();
-      const position = (event.clientX - bounds.left) / bounds.width;
-      const index = Math.floor(position * previewSets[collection].length);
-      showPhoto(collection, index);
+      if (event.pointerType === "touch") {
+        if (touchStartX === null || Math.abs(event.clientX - touchStartX) < 8) return;
+        didSwipe = true;
+        touchCollection = collection;
+        updatePreview(touchStartProgress + (event.clientX - touchStartX) / travel);
+        return;
+      }
+      updatePreview((event.clientX - start) / travel);
     });
 
     item.addEventListener("click", (event) => {
+      if (didSwipe) {
+        event.preventDefault();
+        didSwipe = false;
+        return;
+      }
       if (!window.matchMedia("(hover: none)").matches) return;
       if (touchCollection !== collection) {
         event.preventDefault();
         touchCollection = collection;
         items.forEach((menuItem) => menuItem.classList.remove("is-active"));
         item.classList.add("is-active");
-        showPhoto(collection, 0);
+        updatePreview(progress);
       }
     });
   });
@@ -185,7 +260,9 @@ function renderProject() {
   document.querySelector("[data-project-count]").textContent = `${photos.length} photos`;
   const back = document.querySelector("[data-project-back]");
   back.href = valid ? `${collection}.html` : "index.html";
-  back.textContent = valid ? `Back to ${collection === "digi" ? "Digi" : "Film"}` : "Back to Home";
+  const backLabel = valid ? `Back to ${collection === "digi" ? "Digi" : "Film"}` : "Back to Home";
+  back.setAttribute("aria-label", backLabel);
+  back.title = backLabel;
   document.querySelectorAll(".nav a").forEach((link) => {
     if (link.getAttribute("href") === back.getAttribute("href")) link.classList.add("is-active");
   });

@@ -9,16 +9,23 @@
 <body>
   <header class="site-header">
     <a class="brand" href="index.html">POOM DHARARAG</a>
-    <nav class="nav" aria-label="Main navigation">
-      <a href="index.html">Home</a>
-      <a href="digi.html">Digi</a>
-      <a href="film.html">Film</a>
-      <a href="archive.html">Archive</a>
-      <a href="about.html">About</a>
-    </nav>
+    <details class="nav-menu">
+      <summary class="menu-icon" aria-label="Open menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </summary>
+      <nav class="nav" aria-label="Main navigation">
+        <a href="index.html">Home</a>
+        <a href="digi.html">Digi</a>
+        <a href="film.html">Film</a>
+        <a href="archive.html">Archive</a>
+        <a href="about.html">About</a>
+      </nav>
+    </details>
   </header>
   <main class="page gallery-page" data-project-page>
-    <a class="project-back" href="digi.html" data-project-back>Back to Digi</a>
+    <a class="project-back" href="digi.html" data-project-back aria-label="Back to Digi" title="Back to Digi"><span aria-hidden="true">&#8592;</span></a>
     <section class="gallery-head">
       <div class="gallery-title"><h1 data-project-title>Project</h1></div>
       <span class="count" data-project-count></span>
