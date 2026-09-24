@@ -1,0 +1,15 @@
+@@ -11,8 +11,10 @@
+-  animation: home-hint-right 2.2s ease-in-out infinite;
++  animation: home-hint-right 2.4s linear infinite;
+ }
+ @keyframes home-hint-right {
+-  0%, 100% { transform: translate(-10px, -50%); opacity: 0.4; }
+-  60% { transform: translate(10px, -50%); opacity: 1; }
++  0% { transform: translate(-100px, -50%); opacity: 0; }
++  15% { opacity: 1; }
++  75% { transform: translate(0, -50%); opacity: 1; }
++  90%, 100% { transform: translate(14px, -50%); opacity: 0; }
+ }
+ @media (hover: hover) and (pointer: fine) {
+-  .home-menu .home-menu-item { padding-right: 72px; }
++  .home-menu .home-menu-item { padding-right: 160px; }

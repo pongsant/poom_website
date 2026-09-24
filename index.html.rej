@@ -1,0 +1,15 @@
+@@ -23,3 +23,2 @@
+-          <span class="home-number">01</span>
+           <span class="home-name">Digi</span>
+-          <span class="home-motion-hint" aria-hidden="true">&#8594;</span>
++          <span class="home-motion-hint" aria-hidden="true"></span>
+@@ -28,3 +28,2 @@
+-          <span class="home-number">02</span>
+           <span class="home-name">Film</span>
+-          <span class="home-motion-hint" aria-hidden="true">&#8594;</span>
++          <span class="home-motion-hint" aria-hidden="true"></span>
+@@ -33,3 +33,2 @@
+-          <span class="home-number">03</span>
+           <span class="home-name">Archive</span>
+-          <span class="home-motion-hint" aria-hidden="true">&#8594;</span>
++          <span class="home-motion-hint" aria-hidden="true"></span>
