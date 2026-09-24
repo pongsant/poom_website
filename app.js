@@ -133,10 +133,10 @@ function setupHomeIndex() {
     }
 
     function animateArrow(time) {
-      const elapsed = previousTime ? Math.min(time - previousTime, 64) : 16.67;
+      const elapsed = Math.max(0, Math.min(time - previousTime, 64));
       previousTime = time;
       displayedProgress += (progress - displayedProgress) * (1 - Math.exp(-elapsed / 45));
-      if (reducedMotion.matches || Math.abs(progress - displayedProgress) < 0.001) displayedProgress = progress;
+      if (reducedMotion.matches || Math.abs(progress - displayedProgress) * travel < 0.1) displayedProgress = progress;
       drawArrow();
       if (item.classList.contains("is-active")) {
         showPhoto(collection, Math.floor(displayedProgress * previewSets[collection].length));
@@ -153,10 +153,15 @@ function setupHomeIndex() {
     measureArrow();
 
     function updatePreview(position) {
-      item.classList.add("has-interacted");
+      if (!item.classList.contains("has-interacted")) item.classList.add("has-interacted");
       progress = Math.max(0, Math.min(1, position));
-      items.forEach((menuItem) => menuItem.classList.toggle("is-active", menuItem === item));
-      if (!frame) frame = requestAnimationFrame(animateArrow);
+      if (!item.classList.contains("is-active")) {
+        items.forEach((menuItem) => menuItem.classList.toggle("is-active", menuItem === item));
+      }
+      if (!frame) {
+        previousTime = performance.now();
+        frame = requestAnimationFrame(animateArrow);
+      }
     }
 
     item.addEventListener("pointerenter", (event) => {

@@ -13,8 +13,8 @@
   inset: 0;
   background: currentColor;
   transform-origin: left center;
-  transform: scaleX(var(--arrow-scale, 0));
-  will-change: transform;
+  transform: scale3d(var(--arrow-scale, 0), 1, 1);
+  will-change: transform, translate;
 }
 .home-motion-hint::after {
   content: "";
@@ -25,16 +25,16 @@
   height: 10px;
   border-top: 2px solid currentColor;
   border-right: 2px solid currentColor;
-  transform: translate(var(--arrow-length, 32px), -50%) rotate(45deg);
-  will-change: transform;
+  transform: translate3d(var(--arrow-length, 32px), -50%, 0) rotate(45deg);
+  will-change: transform, translate;
 }
 .home-menu-item:not(.has-interacted) .home-motion-hint::before,
 .home-menu-item:not(.has-interacted) .home-motion-hint::after {
-  animation: arrow-idle-hint 2.4s ease-in-out infinite;
+  animation: arrow-idle-hint 2.8s cubic-bezier(0.45, 0, 0.55, 1) infinite;
 }
 @keyframes arrow-idle-hint {
-  0%, 20%, 100% { translate: 0 0; }
-  55% { translate: 8px 0; }
+  0%, 100% { translate: 0 0 0; }
+  50% { translate: 8px 0 0; }
 }
 @media (prefers-reduced-motion: reduce) {
   .home-menu-item .home-motion-hint::before,
