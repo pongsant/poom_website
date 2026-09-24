@@ -2,13 +2,17 @@ const gallery = document.querySelector("[data-gallery]");
 const previews = document.querySelectorAll("[data-preview]");
 const totalNodes = document.querySelectorAll("[data-count]");
 
-function createFigure(photo, index) {
+function getPhotoAlt(photo, index) {
+  return `${photo.project} photograph ${index + 1}`;
+}
+
+function createFigure(photo, index, photos) {
   const figure = document.createElement("figure");
   figure.className = "photo-card";
 
   const img = document.createElement("img");
   img.src = photo.src;
-  img.alt = `${photo.project} photograph ${index + 1}`;
+  img.alt = getPhotoAlt(photo, index);
   img.loading = index < 8 ? "eager" : "lazy";
   img.decoding = "async";
 
@@ -20,7 +24,7 @@ function createFigure(photo, index) {
   button.className = "photo-open";
   button.setAttribute("aria-label", `Enlarge ${img.alt}`);
   button.append(img);
-  button.addEventListener("click", () => openPhoto(photo, img.alt));
+  button.addEventListener("click", () => openPhoto(photos, index));
   figure.append(button, caption);
   return figure;
 }
@@ -33,7 +37,7 @@ function renderGallery() {
   const fragment = document.createDocumentFragment();
 
   photos.forEach((photo, index) => {
-    fragment.append(createFigure(photo, index));
+    fragment.append(createFigure(photo, index, photos));
   });
 
   gallery.append(fragment);
@@ -46,7 +50,7 @@ function renderPreviews() {
     const fragment = document.createDocumentFragment();
 
     photos.forEach((photo, index) => {
-      fragment.append(createFigure(photo, index));
+      fragment.append(createFigure(photo, index, photos));
     });
 
     node.append(fragment);
@@ -272,15 +276,38 @@ function renderProject() {
     if (link.getAttribute("href") === back.getAttribute("href")) link.classList.add("is-active");
   });
   const grid = document.querySelector("[data-project-gallery]");
-  photos.forEach((photo, index) => grid.append(createFigure(photo, index)));
+  photos.forEach((photo, index) => grid.append(createFigure(photo, index, photos)));
 }
 
 let photoDialog;
-function openPhoto(photo, alt) {
+let activePhotos = [];
+let activePhotoIndex = 0;
+
+function showActivePhoto() {
+  if (!photoDialog || !activePhotos.length) return;
+  const photo = activePhotos[activePhotoIndex];
+  const img = photoDialog.querySelector("img");
+  const count = photoDialog.querySelector("[data-photo-count]");
+  img.src = photo.src;
+  img.alt = getPhotoAlt(photo, activePhotoIndex);
+  count.textContent = `${activePhotoIndex + 1} / ${activePhotos.length}`;
+}
+
+function movePhoto(direction) {
+  if (activePhotos.length < 2) return;
+  activePhotoIndex = (activePhotoIndex + direction + activePhotos.length) % activePhotos.length;
+  showActivePhoto();
+}
+
+function openPhoto(photos, index) {
+  activePhotos = photos;
+  activePhotoIndex = index;
+
   if (!photoDialog) {
     photoDialog = document.createElement("dialog");
     photoDialog.className = "photo-dialog";
     photoDialog.setAttribute("aria-label", "Enlarged photograph");
+
     const close = document.createElement("button");
     close.className = "photo-close";
     close.type = "button";
@@ -288,17 +315,41 @@ function openPhoto(photo, alt) {
     close.title = "Close photograph";
     close.setAttribute("aria-label", "Close photograph");
     close.addEventListener("click", () => photoDialog.close());
+
+    const previous = document.createElement("button");
+    previous.className = "photo-nav photo-nav-prev";
+    previous.type = "button";
+    previous.textContent = "\u2039";
+    previous.title = "Previous photograph";
+    previous.setAttribute("aria-label", "Previous photograph");
+    previous.addEventListener("click", () => movePhoto(-1));
+
+    const next = document.createElement("button");
+    next.className = "photo-nav photo-nav-next";
+    next.type = "button";
+    next.textContent = "\u203a";
+    next.title = "Next photograph";
+    next.setAttribute("aria-label", "Next photograph");
+    next.addEventListener("click", () => movePhoto(1));
+
     const img = document.createElement("img");
-    photoDialog.append(close, img);
+    const count = document.createElement("div");
+    count.className = "photo-count";
+    count.setAttribute("data-photo-count", "");
+    photoDialog.append(close, previous, img, next, count);
+
     photoDialog.addEventListener("click", (event) => {
       if (event.target === photoDialog) photoDialog.close();
     });
     photoDialog.addEventListener("close", () => document.body.classList.remove("viewer-open"));
+    photoDialog.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowLeft") movePhoto(-1);
+      if (event.key === "ArrowRight") movePhoto(1);
+    });
     document.body.append(photoDialog);
   }
-  const img = photoDialog.querySelector("img");
-  img.src = photo.src;
-  img.alt = alt;
+
+  showActivePhoto();
   photoDialog.showModal();
   document.body.classList.add("viewer-open");
 }

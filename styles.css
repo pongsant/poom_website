@@ -114,17 +114,47 @@
   height: 100%;
   object-fit: contain;
 }
-.photo-close {
+.photo-close,
+.photo-nav {
   position: absolute;
-  top: 12px;
-  right: 16px;
+  z-index: 2;
   width: 44px;
   height: 44px;
   border: 0;
   background: transparent;
   color: white;
-  font-size: 36px;
   cursor: pointer;
+  line-height: 1;
+}
+.photo-close {
+  top: 12px;
+  right: 16px;
+  font-size: 36px;
+}
+.photo-nav {
+  top: 50%;
+  width: 56px;
+  height: 72px;
+  border-radius: 2px;
+  background: rgb(16 16 16 / 80%);
+  font-size: 56px;
+  transform: translateY(-50%);
+}
+.photo-nav:hover,
+.photo-nav:focus-visible {
+  background: rgb(255 255 255 / 16%);
+}
+.photo-nav-prev { left: 16px; }
+.photo-nav-next { right: 16px; }
+.photo-count {
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+  bottom: 14px;
+  color: rgb(255 255 255 / 78%);
+  font-size: 13px;
+  letter-spacing: 0;
+  transform: translateX(-50%);
 }
 a:focus-visible, button:focus-visible {
   outline: 2px solid currentColor;
@@ -134,6 +164,16 @@ a:focus-visible, button:focus-visible {
   .project-catalog { grid-template-columns: 1fr; gap: 32px; }
   [data-project-title] { font-size: 40px; }
   .photo-dialog { padding: 64px 12px 12px; }
+  .photo-nav {
+    top: auto;
+    bottom: 14px;
+    width: 48px;
+    height: 48px;
+    font-size: 44px;
+    transform: none;
+  }
+  .photo-nav-prev { left: 12px; }
+  .photo-nav-next { right: 12px; }
   .home-name { font-size: 42px !important; }
   .home-footer { flex-wrap: wrap; gap: 12px; }
 }
@@ -198,7 +238,6 @@ a {
 }
 
 .home-background-image {
-  filter: grayscale(1);
   height: 100%;
   object-fit: cover;
   opacity: 0;
