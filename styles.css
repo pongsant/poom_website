@@ -514,7 +514,6 @@ h2 {
 
 .hero-grid img {
   aspect-ratio: 3 / 4;
-  filter: grayscale(1);
   height: 100%;
   object-fit: cover;
 }
@@ -573,7 +572,19 @@ h2 {
 }
 
 .gallery-grid {
-  columns: 4 240px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px 14px;
+}
+
+.gallery-grid .photo-card {
+  min-width: 0;
+  margin: 0;
+}
+
+.gallery-grid .photo-card img {
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
 }
 
 .photo-card {
@@ -584,12 +595,7 @@ h2 {
 
 .photo-card img {
   background: #e8e8e3;
-  filter: grayscale(1);
-  transition: filter 180ms ease, opacity 180ms ease;
-}
-
-.photo-card:hover img {
-  filter: grayscale(0);
+  transition: opacity 180ms ease;
 }
 
 .photo-card figcaption {
@@ -699,9 +705,12 @@ h2 {
     flex-direction: column;
   }
 
-  .preview-grid,
-  .gallery-grid {
+  .preview-grid {
     columns: 2 150px;
+  }
+
+  .gallery-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .site-footer {
@@ -730,8 +739,11 @@ h2 {
     gap: 8px;
   }
 
-  .preview-grid,
-  .gallery-grid {
+  .preview-grid {
     columns: 1;
+  }
+
+  .gallery-grid {
+    grid-template-columns: 1fr;
   }
 }
