@@ -626,15 +626,22 @@ h2 {
 
 .about-image img {
   aspect-ratio: 4 / 5;
-  filter: grayscale(1);
   height: 100%;
   object-fit: cover;
 }
 
 .about-copy {
-  align-self: end;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: clamp(48px, 8vw, 110px);
+  min-width: 0;
   border-top: 1px solid var(--line);
   padding-top: 28px;
+}
+
+.about-contact a[href^="mailto:"] {
+  overflow-wrap: anywhere;
 }
 
 .about-copy p {
