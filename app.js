@@ -102,9 +102,11 @@ function setupHomeIndex() {
 
   function presentPhoto() {
     if (switching || !pendingPhoto) return;
-    const { image, src, label } = pendingPhoto;
+    const { image: preparedImage, src, label } = pendingPhoto;
     pendingPhoto = null;
     if (src !== requestedSrc || src === currentSrc) return;
+    // Cached photos may still be on screen; give each fade its own layer.
+    const image = preparedImage.cloneNode();
     const nextLayer = 1 - activeLayer;
     const previous = imageLayers[activeLayer];
     image.className = "home-background-image";
@@ -120,12 +122,22 @@ function setupHomeIndex() {
     requestAnimationFrame(() => requestAnimationFrame(() => {
       image.classList.add("is-visible");
       status.textContent = label;
-      setTimeout(() => {
+      let finished = false;
+      const finishTransition = () => {
+        if (finished) return;
+        finished = true;
+        clearTimeout(fallback);
+        image.removeEventListener("transitionend", onTransitionEnd);
         previous.classList.remove("is-visible");
         activeLayer = nextLayer;
         switching = false;
         presentPhoto();
-      }, reducedMotion.matches ? 0 : 100);
+      };
+      const onTransitionEnd = (event) => {
+        if (event.target === image && event.propertyName === "opacity") finishTransition();
+      };
+      image.addEventListener("transitionend", onTransitionEnd);
+      const fallback = setTimeout(finishTransition, reducedMotion.matches ? 0 : 500);
     }));
   }
   let touchCollection = "";
