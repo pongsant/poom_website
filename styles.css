@@ -28,18 +28,47 @@
   transform: translate3d(var(--arrow-length, 32px), -50%, 0) rotate(45deg);
   will-change: transform, translate;
 }
-.home-menu-item:not(.has-interacted) .home-motion-hint::before,
-.home-menu-item:not(.has-interacted) .home-motion-hint::after {
-  animation: arrow-idle-hint 2.8s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+.home-arrow-shadow {
+  --shadow-length: min(96px, 40%);
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+.home-arrow-shadow::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: var(--shadow-length);
+  height: 2px;
+  background: currentColor;
+  box-shadow: -12px 0 8px rgba(255, 255, 255, 0.18);
+}
+.home-arrow-shadow::after {
+  content: "";
+  position: absolute;
+  left: calc(var(--shadow-length) - 10px);
+  top: 50%;
+  width: 10px;
+  height: 10px;
+  border-top: 2px solid currentColor;
+  border-right: 2px solid currentColor;
+  transform: translateY(-50%) rotate(45deg);
+}
+.home-menu-item.is-idle .home-arrow-shadow {
+  animation: arrow-idle-hint 8s cubic-bezier(0.22, 0.61, 0.36, 1) infinite;
+  will-change: transform, opacity;
 }
 @keyframes arrow-idle-hint {
-  0%, 100% { translate: 0 0 0; }
-  50% { translate: 8px 0 0; }
+  0%, 8% { transform: translate3d(0, 0, 0); opacity: 0; }
+  22% { opacity: 0.38; }
+  74% { transform: translate3d(calc(100% - var(--shadow-length)), 0, 0); opacity: 0.28; }
+  88%, 100% { transform: translate3d(calc(100% - var(--shadow-length)), 0, 0); opacity: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .home-menu-item .home-motion-hint::before,
-  .home-menu-item .home-motion-hint::after {
-    animation: none !important;
+  .home-menu-item.is-idle .home-arrow-shadow {
+    animation: none;
   }
 }
 :root {
@@ -241,13 +270,12 @@ a {
   height: 100%;
   object-fit: cover;
   opacity: 0;
-  transform: scale(1.02);
-  transition: opacity 420ms ease, transform 900ms ease;
+  transition: opacity 90ms linear;
+  will-change: opacity;
 }
 
 .home-background-image.is-visible {
   opacity: 1;
-  transform: scale(1);
 }
 
 .home-header,

@@ -74,6 +74,60 @@ function setupHomeIndex() {
   const previewSets = {};
   let activeLayer = 0;
   let currentSrc = "";
+  let requestedSrc = "";
+  let pendingPhoto = null;
+  let switching = false;
+  const decoded = new Map();
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  function preparePhoto(src) {
+    if (decoded.has(src)) {
+      const cached = decoded.get(src);
+      decoded.delete(src);
+      decoded.set(src, cached);
+      return cached;
+    }
+    const image = new Image();
+    image.decoding = "async";
+    image.src = src;
+    const ready = image.decode().then(() => image).catch(() => {
+      decoded.delete(src);
+      return null;
+    });
+    decoded.set(src, ready);
+    // Bound decoded originals in memory while the browser caches downloaded files.
+    while (decoded.size > 4) decoded.delete(decoded.keys().next().value);
+    return ready;
+  }
+
+  function presentPhoto() {
+    if (switching || !pendingPhoto) return;
+    const { image, src, label } = pendingPhoto;
+    pendingPhoto = null;
+    if (src !== requestedSrc || src === currentSrc) return;
+    const nextLayer = 1 - activeLayer;
+    const previous = imageLayers[activeLayer];
+    image.className = "home-background-image";
+    image.alt = "";
+    image.setAttribute("data-home-image", "");
+    image.style.zIndex = "1";
+    previous.style.zIndex = "0";
+    imageLayers[nextLayer].replaceWith(image);
+    imageLayers[nextLayer] = image;
+    currentSrc = src;
+    switching = true;
+    // Keep the previous image fully opaque underneath the new image's fade.
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      image.classList.add("is-visible");
+      status.textContent = label;
+      setTimeout(() => {
+        previous.classList.remove("is-visible");
+        activeLayer = nextLayer;
+        switching = false;
+        presentPhoto();
+      }, reducedMotion.matches ? 0 : 100);
+    }));
+  }
   let touchCollection = "";
 
   items.forEach((item) => {
@@ -92,25 +146,41 @@ function setupHomeIndex() {
 
     const photoIndex = Math.max(0, Math.min(index, photos.length - 1));
     const src = photos[photoIndex].src;
-    if (src === currentSrc) return;
-
-    const nextLayer = activeLayer === 0 ? 1 : 0;
-    currentSrc = src;
-    const preload = new Image();
-    preload.onload = () => {
-      if (currentSrc !== src) return;
-      imageLayers[nextLayer].src = src;
-      imageLayers[nextLayer].classList.add("is-visible");
-      imageLayers[activeLayer].classList.remove("is-visible");
-      activeLayer = nextLayer;
-      status.textContent = `${collection} / ${String(photoIndex + 1).padStart(2, "0")}`;
-    };
-    preload.src = src;
+    if (src === requestedSrc) return;
+    requestedSrc = src;
+    pendingPhoto = null;
+    preparePhoto(src).then((image) => {
+      if (!image || requestedSrc !== src) return;
+      pendingPhoto = {
+        image, src,
+        label: `${collection} / ${String(photoIndex + 1).padStart(2, "0")}`
+      };
+      presentPhoto();
+      for (const offset of [-1, 1]) {
+        const neighbor = photos[photoIndex + offset];
+        if (neighbor) preparePhoto(neighbor.src);
+      }
+    });
   }
 
   items.forEach((item) => {
     const collection = item.dataset.homeCollection;
     const arrow = item.querySelector(".home-motion-hint");
+    const shadow = document.createElement("span");
+    shadow.className = "home-arrow-shadow";
+    arrow.append(shadow);
+    item.classList.add("is-idle");
+    let idleTimer;
+
+    function pauseIdleHint() {
+      item.classList.remove("is-idle");
+      clearTimeout(idleTimer);
+      idleTimer = setTimeout(() => item.classList.add("is-idle"), 1200);
+    }
+
+    item.addEventListener("pointermove", pauseIdleHint, { passive: true });
+    item.addEventListener("pointerdown", pauseIdleHint, { passive: true });
+    item.addEventListener("focus", pauseIdleHint);
     let progress = 0;
     let touchStartProgress = 0;
     let displayedProgress = 0;
@@ -119,8 +189,6 @@ function setupHomeIndex() {
     let available = 0;
     let start = 0;
     let travel = 1;
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-
     function drawArrow() {
       const minimum = Math.min(32, available);
       const length = minimum + displayedProgress * (available - minimum);
@@ -139,7 +207,7 @@ function setupHomeIndex() {
     function animateArrow(time) {
       const elapsed = Math.max(0, Math.min(time - previousTime, 64));
       previousTime = time;
-      displayedProgress += (progress - displayedProgress) * (1 - Math.exp(-elapsed / 45));
+      displayedProgress += (progress - displayedProgress) * (1 - Math.exp(-elapsed / 24));
       if (reducedMotion.matches || Math.abs(progress - displayedProgress) * travel < 0.1) displayedProgress = progress;
       drawArrow();
       if (item.classList.contains("is-active")) {
