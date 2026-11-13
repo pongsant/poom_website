@@ -356,6 +356,34 @@ function renderProject() {
     if (link.getAttribute("href") === back.getAttribute("href")) link.classList.add("is-active");
   });
   const grid = document.querySelector("[data-project-gallery]");
+  if (collection === "digi" && name === "Angy") {
+    const topics = ["In the House", "Backyard"];
+    photos.sort((a, b) => topics.indexOf(a.topic) - topics.indexOf(b.topic));
+    document.body.classList.add("split-project-page");
+    grid.classList.add("project-topics");
+    topics.forEach((topic, topicIndex) => {
+      const section = document.createElement("section");
+      section.className = "project-topic";
+      const heading = document.createElement("h2");
+      heading.id = `project-topic-${topicIndex}`;
+      heading.textContent = topic;
+      section.setAttribute("aria-labelledby", heading.id);
+      const topicGrid = document.createElement("div");
+      topicGrid.className = "gallery-grid";
+      topicGrid.tabIndex = 0;
+      topicGrid.setAttribute("role", "region");
+      topicGrid.setAttribute("aria-label", `${topic} photographs`);
+      photos.forEach((photo, index) => {
+        if (photo.topic !== topic) return;
+        const figure = createFigure(photo, index, photos);
+        if (index === 0) figure.classList.add("project-hero-photo");
+        topicGrid.append(figure);
+      });
+      section.append(heading, topicGrid);
+      grid.append(section);
+    });
+    return;
+  }
   photos.forEach((photo, index) => grid.append(createFigure(photo, index, photos)));
 }
 
