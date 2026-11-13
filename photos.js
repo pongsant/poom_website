@@ -79,6 +79,16 @@ const photoSets = {
     { src: "film/Archive film/IMG_3283.JPG", project: "Film Archive" },
     { src: "film/Archive film/IMG_4149.JPG", project: "Film Archive" },
     { src: "film/Archive film/IMG_3299.JPG", project: "Film Archive" },
-    { src: "film/Archive film/IMG_3301.JPG", project: "Film Archive" }
+    { src: "film/Archive film/IMG_3301.JPG", project: "Film Archive" },
+    { src: "film/Archive film/IMG_7429.JPG", project: "Film Archive" },
+    { src: "film/Archive film/IMG_7438.JPG", project: "Film Archive" },
+    { src: "film/Archive film/IMG_7443.JPG", project: "Film Archive" },
+    { src: "film/Archive film/IMG_7445.JPG", project: "Film Archive" },
+    { src: "film/Archive film/IMG_7449.JPG", project: "Film Archive" },
+    { src: "film/Archive film/IMG_7450.JPG", project: "Film Archive" },
+    { src: "film/Archive film/IMG_7451.JPG", project: "Film Archive" },
+    { src: "film/Archive film/IMG_7452.JPG", project: "Film Archive" },
+    { src: "film/Archive film/IMG_7455.JPG", project: "Film Archive" },
+    { src: "film/Archive film/IMG_7456.JPG", project: "Film Archive" }
   ]
 };
