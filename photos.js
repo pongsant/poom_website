@@ -33,7 +33,21 @@ const photoSets = {
     { src: "digi/work 3.2/21_angy.jpg", project: "Work 3" },
     { src: "digi/work 3.2/23_angy.jpg", project: "Work 3" },
     { src: "digi/work 3.2/25_angy.jpg", project: "Work 3" },
-    { src: "digi/work 3.2/26_angy.jpg", project: "Work 3" }
+    { src: "digi/work 3.2/26_angy.jpg", project: "Work 3" },
+    { src: "digi/work 4/01_abtract.jpg", project: "Work 4" },
+    { src: "digi/work 4/03_connect.jpg", project: "Work 4" },
+    { src: "digi/work 4/04_reflection.jpg", project: "Work 4" },
+    { src: "digi/work 4/05_connect.jpg", project: "Work 4" },
+    { src: "digi/work 4/05_reflection.jpg", project: "Work 4" },
+    { src: "digi/work 4/06_connect.jpg", project: "Work 4" },
+    { src: "digi/work 4/07_connect.jpg", project: "Work 4" },
+    { src: "digi/work 4/08_connect.jpg", project: "Work 4" },
+    { src: "digi/work 4/10_empty.jpg", project: "Work 4" },
+    { src: "digi/work 4/11_empty.jpg", project: "Work 4" },
+    { src: "digi/work 4/13_reflection.jpg", project: "Work 4" },
+    { src: "digi/work 4/14_contrast.jpg", project: "Work 4" },
+    { src: "digi/work 4/15_abtractสงบ.jpg", project: "Work 4" },
+    { src: "digi/work 4/17_abtractร่องรอย.jpg", project: "Work 4" }
   ],
   film: [
     { src: "film/Project 2/000020980008.jpg", project: "Project 2" },
