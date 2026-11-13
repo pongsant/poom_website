@@ -16,7 +16,6 @@ const photoSets = {
     { src: "digi/work/05_house.jpg", project: "House" },
     { src: "digi/work/02_house.jpg", project: "House" },
     { src: "digi/Work 2/21_angy.jpg", project: "Work 2" },
-    { src: "digi/Work 2/36_angy.jpg", project: "Work 2" },
     { src: "digi/Work 2/30_angy.jpg", project: "Work 2" },
     { src: "digi/Work 2/18_angy.jpg", project: "Work 2" },
     { src: "digi/Work 2/27_angy.jpg", project: "Work 2" },
