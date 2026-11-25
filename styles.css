@@ -888,3 +888,140 @@ h2 {
   .split-project-page [data-project-title] { font-size: 36px; }
   .split-project-page .gallery-head { gap: 8px; }
 }
+
+/* Give split collections the full width of each scrolling half. */
+.large-photo-page .gallery-page {
+  padding: 12px 8px 0;
+}
+
+.large-photo-page .gallery-head {
+  align-items: center;
+  flex-direction: row;
+  padding: 0 8px 12px;
+  gap: 12px;
+}
+
+.large-photo-page .gallery-title h1 {
+  font-size: clamp(1.75rem, 4vw, 3rem);
+  margin: 0;
+}
+
+.large-photo-page .gallery-title p {
+  display: none;
+}
+
+.large-photo-page .project-topic {
+  padding: 0 8px 0 0;
+}
+
+.large-photo-page .project-topic + .project-topic {
+  padding: 0 0 0 8px;
+}
+
+.large-photo-page .project-topic > h2 {
+  padding: 10px 0;
+}
+
+.large-photo-page .project-topic > .gallery-grid {
+  padding: 0 0 12px;
+  flex: 1;
+}
+
+.large-photo-page .photo-card img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.large-photo-page > .site-footer {
+  margin: 0 8px;
+  padding: 8px 0;
+}
+
+.large-photo-page .project-back {
+  width: 32px;
+  height: 32px;
+  font-size: 28px;
+  margin-bottom: 4px;
+  flex-shrink: 0;
+}
+
+.archive-page .gallery-head {
+  align-items: center;
+  text-align: center;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.archive-page .gallery-title h1 {
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.large-photo-page:not(.archive-page) .gallery-head {
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+  gap: 6px;
+}
+
+.large-photo-page [data-project-title] {
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.book-project {
+  min-height: 45vh;
+  padding: clamp(24px, 5vw, 64px) 0;
+}
+
+.book-project h2 {
+  margin: 0 0 16px;
+  font-size: clamp(2rem, 6vw, 5rem);
+  line-height: 1.1;
+}
+
+.book-project p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 1rem;
+}
+
+.book-cover img {
+  aspect-ratio: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+.book-back {
+  display: inline-block;
+  margin-bottom: 24px;
+  font-size: 1rem;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.book-heading {
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 12px;
+}
+
+.book-heading h1 {
+  margin: 0;
+  font-weight: 700;
+}
+
+.book-pages {
+  display: grid;
+  gap: clamp(16px, 3vw, 40px);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.book-pages img {
+  width: 100%;
+  height: auto;
+  background: white;
+}

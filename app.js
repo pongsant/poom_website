@@ -36,6 +36,33 @@ function renderGallery() {
   const photos = photoSets[type] || [];
   const fragment = document.createDocumentFragment();
 
+  if (type === "archive") {
+    [
+      { project: "Film Archive", title: "Film" },
+      { project: "Digital Archive", title: "Digital" }
+    ].forEach(({ project, title }) => {
+      const section = document.createElement("section");
+      section.className = "project-topic";
+      const heading = document.createElement("h2");
+      heading.id = `archive-${title.toLowerCase()}`;
+      heading.textContent = title;
+      section.setAttribute("aria-labelledby", heading.id);
+      const grid = document.createElement("div");
+      grid.className = "gallery-grid";
+      grid.tabIndex = 0;
+      grid.setAttribute("role", "region");
+      grid.setAttribute("aria-label", `${title} archive photographs`);
+      const collection = photos.filter((photo) => photo.project === project);
+      collection.forEach((photo, index) => {
+        grid.append(createFigure(photo, index, collection));
+      });
+      section.append(heading, grid);
+      fragment.append(section);
+    });
+    gallery.append(fragment);
+    return;
+  }
+
   photos.forEach((photo, index) => {
     fragment.append(createFigure(photo, index, photos));
   });
@@ -359,7 +386,7 @@ function renderProject() {
   if (collection === "digi" && name === "Angy") {
     const topics = ["In the House", "Backyard"];
     photos.sort((a, b) => topics.indexOf(a.topic) - topics.indexOf(b.topic));
-    document.body.classList.add("split-project-page");
+    document.body.classList.add("split-project-page", "large-photo-page");
     grid.classList.add("project-topics");
     topics.forEach((topic, topicIndex) => {
       const section = document.createElement("section");
@@ -464,3 +491,19 @@ function openPhoto(photos, index) {
 
 renderCatalog();
 renderProject();
+
+function setupBookViewer() {
+  const images = [...document.querySelectorAll(".book-pages > img")];
+  const photos = images.map((img) => ({ src: img.getAttribute("src"), project: "In-ner" }));
+  images.forEach((img, index) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "photo-open";
+    button.setAttribute("aria-label", `Enlarge ${img.alt}`);
+    img.replaceWith(button);
+    button.append(img);
+    button.addEventListener("click", () => openPhoto(photos, index));
+  });
+}
+
+setupBookViewer();
