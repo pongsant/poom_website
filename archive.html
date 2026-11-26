@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Archive - POOM DHARARAG</title>
-    <link rel="stylesheet" href="styles.css?v=archive-centered-20261125">
+    <link rel="stylesheet" href="styles.css?v=photo-menu-20261125">
   </head>
   <body class="split-project-page archive-page large-photo-page">
     <header class="site-header">
@@ -17,9 +17,17 @@
         </summary>
         <nav class="nav" aria-label="Main navigation">
           <a href="index.html">Home</a>
-          <a href="digi.html">Digi</a>
-          <a href="film.html">Film</a>
-          <a class="is-active" href="archive.html">Archive</a>
+          <div class="photo-menu is-current">
+            <button class="photo-menu-toggle" type="button" aria-expanded="false" aria-controls="photo-options">Photo<span class="photo-menu-indicator" aria-hidden="true"></span></button>
+            <div class="photo-menu-options" id="photo-options" inert>
+              <div class="photo-menu-links">
+                <a href="digi.html">Digi</a>
+                <a href="film.html">Film</a>
+                <a class="is-active" aria-current="page" href="archive.html">Archive</a>
+                <a href="abstract.html">Abstract</a>
+              </div>
+            </div>
+          </div>
           <a href="book.html">Book</a>
           <a href="about.html">About</a>
         </nav>
@@ -43,7 +51,8 @@
       <span>Archive Collection</span>
     </footer>
 
-    <script src="photos.js?v=film-angy-20261125"></script>
-    <script src="app.js?v=archive-split-20261125"></script>
+    <script src="photos.js?v=abstract-grouped-20261125"></script>
+    <script src="app.js?v=abstract-20261125"></script>
+    <script src="navigation.js?v=photo-menu-20261125"></script>
   </body>
 </html>

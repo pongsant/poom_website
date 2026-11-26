@@ -1025,3 +1025,120 @@ h2 {
   height: auto;
   background: white;
 }
+
+/* Consistent centered, bold page and collection headings. */
+body .page .gallery-head {
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+  gap: 6px;
+}
+
+body .page .gallery-title h1 {
+  font-size: clamp(1.75rem, 4vw, 3rem);
+  font-weight: 700;
+  line-height: 1.1;
+  margin: 0;
+}
+
+body .gallery-title .section-kicker {
+  display: none;
+}
+
+body .project-topic > h2,
+body .project-cover h2 {
+  text-align: center;
+  font-weight: 700;
+}
+
+.project-cover > span {
+  display: block;
+  text-align: center;
+}
+
+.about-page .about {
+  padding-top: 0;
+}
+
+.home-name {
+  font-size: clamp(2rem, 7vh, 5.5rem);
+}
+
+.home-menu {
+  margin: 24px 0;
+}
+
+/* Expandable Photo navigation, shared across every page. */
+.photo-menu { width: 100%; }
+.photo-menu-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  width: 100%;
+  padding: 6px 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-transform: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.photo-menu-toggle:hover,
+.photo-menu.is-current > .photo-menu-toggle { text-decoration: underline; text-underline-offset: 8px; text-decoration-thickness: 1px; }
+.photo-menu-indicator {
+  position: relative;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+.photo-menu-indicator::before,
+.photo-menu-indicator::after {
+  content: "";
+  position: absolute;
+  top: 7px;
+  left: 0;
+  width: 16px;
+  height: 2px;
+  background: currentColor;
+  transition: transform 260ms ease;
+}
+.photo-menu-indicator::after { transform: rotate(90deg); }
+.photo-menu.is-expanded .photo-menu-indicator::after { transform: rotate(0); }
+.photo-menu-options {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  visibility: hidden;
+  transition: grid-template-rows 300ms ease, opacity 220ms ease, visibility 300ms;
+}
+.photo-menu.is-expanded .photo-menu-options {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  visibility: visible;
+}
+.photo-menu-links {
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  font-size: 1.125rem;
+  font-weight: 500;
+  gap: 8px;
+}
+.photo-menu-links > a { margin-left: 16px; }
+.photo-menu-links > a:first-child { margin-top: 14px; }
+.photo-menu-links > a:last-child { margin-bottom: 4px; }
+.photo-menu-toggle:focus-visible { outline: 2px solid currentColor; outline-offset: 5px; }
+.nav-menu[open] .nav { animation: menu-enter 220ms ease both; justify-content: safe center; }
+@keyframes menu-enter {
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .photo-menu-options,
+  .photo-menu-indicator::after { transition: none; }
+  .nav-menu[open] .nav { animation: none; }
+}

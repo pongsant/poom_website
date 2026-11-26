@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>About - POOM DHARARAG</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=photo-menu-20261125">
   </head>
   <body>
     <header class="site-header">
@@ -17,25 +17,32 @@
         </summary>
         <nav class="nav" aria-label="Main navigation">
           <a href="index.html">Home</a>
-          <a href="digi.html">Digi</a>
-          <a href="film.html">Film</a>
-          <a href="archive.html">Archive</a>
+          <div class="photo-menu">
+            <button class="photo-menu-toggle" type="button" aria-expanded="false" aria-controls="photo-options">Photo<span class="photo-menu-indicator" aria-hidden="true"></span></button>
+            <div class="photo-menu-options" id="photo-options" inert>
+              <div class="photo-menu-links">
+                <a href="digi.html">Digi</a>
+                <a href="film.html">Film</a>
+                <a href="archive.html">Archive</a>
+                <a href="abstract.html">Abstract</a>
+              </div>
+            </div>
+          </div>
           <a href="book.html">Book</a>
-          <a class="is-active" href="about.html">About</a>
+          <a class="is-active" aria-current="page" href="about.html">About</a>
         </nav>
       </details>
     </header>
 
-    <main class="page">
+    <main class="page gallery-page about-page">
+      <section class="gallery-head">
+        <div class="gallery-title"><h1>POOM DHARARAG</h1></div>
+      </section>
       <section class="about">
         <div class="about-image">
           <img src="digi/Archive%20photo/09_final.jpg" alt="POOM DHARARAG portfolio photograph">
         </div>
         <div class="about-copy">
-          <div class="about-heading">
-            <p class="section-kicker">About</p>
-            <h1>POOM DHARARAG</h1>
-          </div>
           <div class="about-contact">
             <p><a href="mailto:poom.dhararag@gmail.com">poom.dhararag@gmail.com</a></p>
             <p>Based in Bangkok and New York</p>
@@ -48,5 +55,6 @@
       <span>POOM DHARARAG</span>
       <span>Photography Portfolio</span>
     </footer>
+    <script src="navigation.js?v=photo-menu-20261125"></script>
   </body>
 </html>

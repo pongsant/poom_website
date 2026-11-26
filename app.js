@@ -368,7 +368,7 @@ function renderProject() {
   const params = new URLSearchParams(location.search);
   const collection = params.get("collection");
   const name = params.get("project");
-  const valid = collection === "digi" || collection === "film";
+  const valid = collection === "digi" || collection === "film" || collection === "abstract";
   const photos = valid ? photoSets[collection].filter((photo) => photo.project === name) : [];
   const title = photos.length ? name : "Project not found";
   document.title = `${title} - POOM DHARARAG`;
@@ -376,7 +376,7 @@ function renderProject() {
   document.querySelector("[data-project-count]").textContent = `${photos.length} photos`;
   const back = document.querySelector("[data-project-back]");
   back.href = valid ? `${collection}.html` : "index.html";
-  const backLabel = valid ? `Back to ${collection === "digi" ? "Digi" : "Film"}` : "Back to Home";
+  const backLabel = valid ? `Back to ${{ digi: "Digi", film: "Film", abstract: "Abstract" }[collection]}` : "Back to Home";
   back.setAttribute("aria-label", backLabel);
   back.title = backLabel;
   document.querySelectorAll(".nav a").forEach((link) => {
