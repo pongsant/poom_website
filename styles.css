@@ -1069,6 +1069,12 @@ body .project-cover h2 {
 }
 
 /* Expandable Photo navigation, shared across every page. */
+.abstract-photos .photo-card img {
+  aspect-ratio: auto;
+  height: auto;
+  object-fit: contain;
+}
+
 .photo-menu { width: 100%; }
 .photo-menu-toggle {
   display: flex;

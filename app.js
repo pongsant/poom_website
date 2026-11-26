@@ -383,6 +383,15 @@ function renderProject() {
     if (link.getAttribute("href") === back.getAttribute("href")) link.classList.add("is-active");
   });
   const grid = document.querySelector("[data-project-gallery]");
+  if (collection === "abstract") {
+    grid.classList.add("abstract-photos");
+    photos.forEach((photo, index) => {
+      const figure = createFigure(photo, index, photos);
+      figure.querySelector("figcaption").remove();
+      grid.append(figure);
+    });
+    return;
+  }
   if (collection === "digi" && name === "Angy") {
     const topics = ["In the House", "Backyard"];
     photos.sort((a, b) => topics.indexOf(a.topic) - topics.indexOf(b.topic));
